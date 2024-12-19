@@ -8,31 +8,45 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: '#787908',
+        tabBarActiveTintColor: '#FF0381',
         headerShown: false,
         tabBarStyle: Platform.select({
           ios: {
             position: 'absolute',
+            backgroundColor: '#F4F3F1',
+            borderTopWidth: 0,
           },
-          default: {},
+          default: {
+            backgroundColor: '#F4F3F1',
+            borderTopWidth: 0,
+          },
         }),
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
+          title: 'Accueil',
           tabBarIcon: ({ color }) => (
             <IconSymbol size={28} name="house.fill" color={color} />
           ),
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="travel"
         options={{
-          title: 'Explore',
+          title: 'Voyager',
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="paperplane.fill" color={color} />
+            <IconSymbol size={28} name="car.fill" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: 'Profil',
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={28} name="person.fill" color={color} />
           ),
         }}
       />

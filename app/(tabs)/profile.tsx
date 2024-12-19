@@ -3,7 +3,7 @@ import { Text, View, TextInput, Button, Alert } from 'react-native';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../../firebaseConfig';
 
-export default function ExploreScreen() {
+export default function ProfileScreen() {
   const [username, setUsername] = useState('');
   const [city, setCity] = useState('');
   const [age, setAge] = useState('');
@@ -45,7 +45,7 @@ export default function ExploreScreen() {
   };
 
   return (
-    <View className="flex-1 justify-center items-center p-4 bg-white">
+    <View className="flex-1 justify-center items-center p-4">
       <Text className="text-2xl font-bold mb-4 text-blue-400">Add User</Text>
 
       <TextInput
