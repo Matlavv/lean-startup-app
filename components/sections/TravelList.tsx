@@ -1,47 +1,67 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, Image, TouchableOpacity } from 'react-native';
 import { images } from '../../assets/images';
+import { db } from '../../firebaseConfig';
+import {
+  collection,
+  query,
+  getDocs,
+  orderBy,
+  Timestamp,
+} from 'firebase/firestore';
 
 type Travel = {
-  id: number;
-  city: string;
+  id: string;
+  departure: string;
+  destination: string;
   date: string;
   time: string;
   price: number;
+  availableSeats: number;
+  isActive: boolean;
 };
 
-const travels: Travel[] = [
-  {
-    id: 1,
-    city: 'Lyon',
-    date: '21/12/2024',
-    time: '19h00',
-    price: 36,
-  },
-  {
-    id: 2,
-    city: 'Paris',
-    date: '22/12/2024',
-    time: '08h30',
-    price: 45,
-  },
-  {
-    id: 3,
-    city: 'Marseille',
-    date: '23/12/2024',
-    time: '14h15',
-    price: 52,
-  },
-  {
-    id: 4,
-    city: 'Bordeaux',
-    date: '24/12/2024',
-    time: '10h45',
-    price: 48,
-  },
-];
-
 export default function TravelList() {
+  const [travels, setTravels] = useState<Travel[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTravels = async () => {
+      try {
+        const ridesCollection = collection(db, 'rides');
+        const q = query(ridesCollection, orderBy('createdAt', 'desc'));
+        const querySnapshot = await getDocs(q);
+
+        const travelsList = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          departure: doc.data().departure,
+          destination: doc.data().destination,
+          date: doc.data().date,
+          time: doc.data().time,
+          price: doc.data().price,
+          availableSeats: doc.data().availableSeats,
+          isActive: doc.data().isActive,
+        }));
+
+        setTravels(travelsList);
+      } catch (error) {
+        console.error('Error fetching travels:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTravels();
+  }, []);
+
+  if (loading) {
+    return (
+      <View className="flex-1 items-center justify-center">
+        <Text>Chargement des trajets...</Text>
+      </View>
+    );
+  }
+
   return (
     <ScrollView className="space-y-4">
       {travels.map((travel) => (
@@ -58,9 +78,20 @@ export default function TravelList() {
                 resizeMode="cover"
               />
               <View>
-                <Text className="text-lg font-bold mb-1">{travel.city}</Text>
+                <View className="flex-row space-x-2">
+                  <Text className="text-lg font-bold">{travel.departure}</Text>
+                  <Text className="text-lg">→</Text>
+                  <Text className="text-lg font-bold">
+                    {travel.destination}
+                  </Text>
+                </View>
                 <Text className="text-gray-500">
                   {travel.date} - {travel.time}
+                </Text>
+                <Text className="text-gray-500">
+                  {travel.availableSeats} place
+                  {travel.availableSeats > 1 ? 's' : ''} disponible
+                  {travel.availableSeats > 1 ? 's' : ''}
                 </Text>
               </View>
             </View>

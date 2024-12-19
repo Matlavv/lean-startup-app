@@ -2,6 +2,7 @@ import { View, Image, Text, TouchableOpacity } from 'react-native';
 import React from 'react';
 import { images } from '../../assets/images';
 import TravelList from '@/components/sections/TravelList';
+import { router } from 'expo-router';
 
 export default function TravelScreen() {
   return (
@@ -25,7 +26,10 @@ export default function TravelScreen() {
           <Text className="text-2xl font-bold text-primary-black">
             Trajets disponibles
           </Text>
-          <TouchableOpacity className="w-12 h-12 flex items-center justify-center bg-primary-blue rounded-full">
+          <TouchableOpacity
+            onPress={() => router.push('/travel/createTravel')}
+            className="w-12 h-12 flex items-center justify-center bg-primary-blue rounded-full"
+          >
             <Text className="text-primary-white text-3xl font-bold">+</Text>
           </TouchableOpacity>
         </View>
