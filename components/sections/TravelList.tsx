@@ -2,13 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, Image, TouchableOpacity } from 'react-native';
 import { images } from '../../assets/images';
 import { db } from '../../firebaseConfig';
-import {
-  collection,
-  query,
-  getDocs,
-  orderBy,
-  Timestamp,
-} from 'firebase/firestore';
+import { collection, query, getDocs, orderBy } from 'firebase/firestore';
+import { router } from 'expo-router';
 
 type Travel = {
   id: string;
@@ -18,7 +13,6 @@ type Travel = {
   time: string;
   price: number;
   availableSeats: number;
-  isActive: boolean;
 };
 
 export default function TravelList() {
@@ -66,7 +60,15 @@ export default function TravelList() {
     <ScrollView className="space-y-4">
       {travels.map((travel) => (
         <View key={travel.id} className="bg-white p-4 rounded-2xl my-2">
-          <TouchableOpacity className="flex-row items-center justify-between w-full">
+          <TouchableOpacity
+            className="flex-row items-center justify-between w-full"
+            onPress={() => {
+              router.push({
+                pathname: '/travel/travelDetails',
+                params: travel,
+              });
+            }}
+          >
             <View className="flex-row items-center space-x-4">
               <Image
                 source={images.canyon}
